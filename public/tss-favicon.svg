@@ -1,0 +1,66 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background shape -->
+  <rect width="40" height="40" rx="7" fill="#0F1115" />
+
+  <!-- Bar chart with TSS incorporated (simplified for favicon) -->
+  <!-- T bar -->
+  <rect x="7" y="10" width="6" height="3" fill="#4285F4" />
+  <rect x="10" y="13" width="3" height="8" fill="#4285F4" />
+
+  <!-- S bars (first S) -->
+  <rect x="17" y="10" width="6" height="3" fill="#34A853" />
+  <rect x="17" y="13" width="3" height="3" fill="#34A853" />
+  <rect x="17" y="16" width="6" height="3" fill="#34A853" />
+  <rect x="20" y="19" width="3" height="3" fill="#34A853" />
+  <rect x="17" y="22" width="6" height="3" fill="#34A853" />
+
+  <!-- S bars (second S) -->
+  <rect x="27" y="10" width="6" height="3" fill="#FBBC05" />
+  <rect x="27" y="13" width="3" height="3" fill="#FBBC05" />
+  <rect x="27" y="16" width="6" height="3" fill="#FBBC05" />
+  <rect x="30" y="19" width="3" height="3" fill="#FBBC05" />
+  <rect x="27" y="22" width="6" height="3" fill="#FBBC05" />
+
+  <!-- Data points (scatter plot elements) - larger for better visibility -->
+  <circle cx="7" cy="10" r="1.2" fill="#EA4335" />
+  <circle cx="13" cy="10" r="1.2" fill="#EA4335" />
+  <circle cx="10" cy="21" r="1.2" fill="#EA4335" />
+
+  <circle cx="17" cy="10" r="1.2" fill="#EA4335" />
+  <circle cx="23" cy="10" r="1.2" fill="#EA4335" />
+  <circle cx="17" cy="16" r="1.2" fill="#EA4335" />
+  <circle cx="23" cy="16" r="1.2" fill="#EA4335" />
+  <circle cx="17" cy="22" r="1.2" fill="#EA4335" />
+  <circle cx="23" cy="22" r="1.2" fill="#EA4335" />
+
+  <circle cx="27" cy="10" r="1.2" fill="#EA4335" />
+  <circle cx="33" cy="10" r="1.2" fill="#EA4335" />
+  <circle cx="27" cy="16" r="1.2" fill="#EA4335" />
+  <circle cx="33" cy="16" r="1.2" fill="#EA4335" />
+  <circle cx="27" cy="22" r="1.2" fill="#EA4335" />
+  <circle cx="33" cy="22" r="1.2" fill="#EA4335" />
+
+  <!-- Line chart elements (new addition) -->
+  <!-- Line chart for T -->
+  <polyline points="5,15 7,13 10,17 13,12 15,14"
+    stroke="#1A73E8" stroke-width="1.2" fill="none" />
+
+  <!-- Line chart for first S -->
+  <polyline points="15,20 17,18 20,14 23,19 25,17"
+    stroke="#0F9D58" stroke-width="1.2" fill="none" />
+
+  <!-- Line chart for second S -->
+  <polyline points="25,20 27,15 30,18 33,13 35,16"
+    stroke="#F4B400" stroke-width="1.2" fill="none" />
+
+  <!-- Decorative elements (chart axis) - thicker for better visibility -->
+  <rect x="5" y="26" width="30" height="1.2" fill="#FFFFFF" />
+  <rect x="5" y="26" width="1.2" height="3" fill="#FFFFFF" />
+  <rect x="35" y="26" width="1.2" height="3" fill="#FFFFFF" />
+  <rect x="15" y="26" width="1" height="2" fill="#FFFFFF" />
+  <rect x="25" y="26" width="1" height="2" fill="#FFFFFF" />
+
+  <!-- Chart grid lines (more visible) -->
+  <line x1="5" y1="16" x2="35" y2="16" stroke="#FFFFFF" stroke-width="0.3" stroke-opacity="0.4" />
+  <line x1="5" y1="21" x2="35" y2="21" stroke="#FFFFFF" stroke-width="0.3" stroke-opacity="0.4" />
+</svg>
