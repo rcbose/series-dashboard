@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useThemeContext } from '../contexts/ThemeContext';
 import {
   Box,
   Drawer,
@@ -19,7 +20,10 @@ import {
   Button,
   TextField,
   ClickAwayListener,
-  Collapse
+  Collapse,
+  Menu,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import tssLogo from '../assets/tss-logo.svg';
 import tssLogoSmall from '../assets/tss-logo-small.svg';
@@ -34,8 +38,20 @@ import {
   Add as AddIcon,
   Edit as EditIcon,
   ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon
+  ExpandLess as ExpandLessIcon,
+  Brightness4,
+  Brightness7
 } from '@mui/icons-material';
+
+// TSS specific colors
+const tssColors = {
+  sidebarBg: '#0F1115',  // Dark sidebar background
+  sidebarText: '#9DA5B4',
+  sidebarActiveText: '#FFFFFF',
+  sidebarActiveBg: '#1F2026',
+  headerBg: '#FFFFFF',
+  contentBg: '#F8F9FA',
+};
 
 const drawerWidth = 240;
 
@@ -61,12 +77,15 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const { themeMode, toggleTheme } = useThemeContext();
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [dashboardName, setDashboardName] = useState(propDashboardName || 'Dashboard');
   const [isEditing, setIsEditing] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>(['Dashboard']);
+  const [profileMenuAnchorEl, setProfileMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const isProfileMenuOpen = Boolean(profileMenuAnchorEl);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   // Update local state when prop changes
@@ -124,6 +143,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const handleToggleEditMode = () => {
     setIsEditMode(prevMode => !prevMode);
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchorEl(null);
   };
 
   const handleDashboardNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,9 +220,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 duration: theme.transitions.duration.enteringScreen,
               }),
           }),
-          backgroundColor: '#FFFFFF',
+          backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
-          borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+          borderBottom: `1px solid ${theme.palette.divider}`,
           height: '64px',
         }}
       >
@@ -208,7 +235,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             sx={{
               marginRight: 3,
               ...(open && { display: 'none' }),
-              color: '#646B82',
+              color: theme.palette.text.secondary,
             }}
           >
             <MenuIcon />
@@ -287,14 +314,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      border: '1px dashed rgba(0, 0, 0, 0.2)',
+                      border: `1px dashed ${alpha(theme.palette.text.primary, 0.2)}`,
                       borderRadius: '4px',
                       padding: '4px 8px',
                       marginLeft: 1,
                       minWidth: '150px',
                       maxWidth: '500px',
                       '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                        backgroundColor: alpha(theme.palette.text.primary, 0.04),
                       },
                       cursor: 'pointer',
                     }}
@@ -380,14 +407,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      border: '1px dashed rgba(0, 0, 0, 0.2)',
+                      border: `1px dashed ${alpha(theme.palette.text.primary, 0.2)}`,
                       borderRadius: '4px',
                       padding: '4px 8px',
                       marginLeft: 1,
                       minWidth: '150px',
                       maxWidth: '500px',
                       '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                        backgroundColor: alpha(theme.palette.text.primary, 0.04),
                       },
                       cursor: 'pointer',
                     }}
@@ -428,11 +455,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             sx={{
               position: 'relative',
               borderRadius: theme.shape.borderRadius,
-              backgroundColor: alpha('#F8F9FA', 1),
-              border: '1px solid rgba(0, 0, 0, 0.1)',
+              backgroundColor: alpha(theme.palette.background.default, 1),
+              border: `1px solid ${theme.palette.divider}`,
               '&:hover': {
-                backgroundColor: alpha('#F8F9FA', 1),
-                border: '1px solid rgba(0, 0, 0, 0.2)',
+                backgroundColor: alpha(theme.palette.background.default, 1),
+                border: `1px solid ${alpha(theme.palette.text.primary, 0.2)}`,
               },
               margin: '0 auto',
               width: '400px',
@@ -448,7 +475,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#646B82',
+                color: theme.palette.text.secondary,
               }}
             >
               <SearchIcon />
@@ -537,6 +564,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               Create Dashboard
             </Button>
             <Avatar
+              onClick={handleProfileMenuOpen}
               sx={{
                 bgcolor: theme.palette.secondary.main,
                 cursor: 'pointer',
@@ -548,6 +576,54 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             >
               DD
             </Avatar>
+            <Menu
+              anchorEl={profileMenuAnchorEl}
+              open={isProfileMenuOpen}
+              onClose={handleProfileMenuClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.1))',
+                  mt: 1.5,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <MenuItem>
+                <Typography variant="body1">Profile</Typography>
+              </MenuItem>
+              <MenuItem>
+                <Typography variant="body1">Settings</Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={toggleTheme}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  {themeMode === 'light' ? (
+                    <>
+                      <Brightness4 sx={{ mr: 1 }} />
+                      <Typography variant="body1">Switch to Dark Mode</Typography>
+                    </>
+                  ) : (
+                    <>
+                      <Brightness7 sx={{ mr: 1 }} />
+                      <Typography variant="body1">Switch to Light Mode</Typography>
+                    </>
+                  )}
+                </Box>
+              </MenuItem>
+              <Divider />
+              <MenuItem>
+                <Typography variant="body1">Logout</Typography>
+              </MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -562,7 +638,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             boxSizing: 'border-box',
             whiteSpace: 'nowrap',
             overflowX: 'hidden',
-            backgroundColor: '#0F1115', // TSS dark sidebar
+            backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : tssColors.sidebarBg, // TSS sidebar
             borderRight: 'none',
             boxShadow: open ? theme.shadows[2] : 'none',
             transition: theme.transitions.create('width', {
@@ -620,7 +696,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               />
             )}
           </Box>
-          <IconButton onClick={handleDrawerClose} sx={{ color: '#9DA5B4' }}>
+          <IconButton onClick={handleDrawerClose} sx={{ color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText }}>
             <ChevronLeftIcon />
           </IconButton>
         </Toolbar>
@@ -638,12 +714,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     py: 1,
                     borderRadius: theme.shape.borderRadius,
                     '&:hover': {
-                      backgroundColor: index === 0 ? '#1F2026' : 'rgba(255, 255, 255, 0.08)',
+                      backgroundColor: index === 0 ? (theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg) : (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)'),
                     },
                     '&.Mui-selected': {
-                      backgroundColor: '#1F2026',
+                      backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg,
                       '&:hover': {
-                        backgroundColor: '#1F2026',
+                        backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg,
                       },
                     },
                   }}
@@ -653,7 +729,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       minWidth: 0,
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center',
-                      color: index === 0 ? theme.palette.primary.main : '#9DA5B4',
+                      color: index === 0 ? theme.palette.primary.main : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
                     }}
                   >
                     {item.icon}
@@ -663,14 +739,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     primaryTypographyProps={{
                       fontSize: '0.875rem',
                       fontWeight: 500,
-                      color: index === 0 ? '#FFFFFF' : '#9DA5B4',
+                      color: index === 0 ? (theme.palette.mode === 'dark' ? theme.palette.common.white : tssColors.sidebarActiveText) : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
                     }}
                     sx={{ opacity: open ? 1 : 0 }}
                   />
                   {open && item.children && (
                     expandedItems.includes(item.text) ?
-                    <ExpandLessIcon sx={{ color: '#9DA5B4', opacity: open ? 1 : 0 }} /> :
-                    <ExpandMoreIcon sx={{ color: '#9DA5B4', opacity: open ? 1 : 0 }} />
+                    <ExpandLessIcon sx={{ color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText, opacity: open ? 1 : 0 }} /> :
+                    <ExpandMoreIcon sx={{ color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText, opacity: open ? 1 : 0 }} />
                   )}
                 </ListItemButton>
               </ListItem>
@@ -698,7 +774,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                               minWidth: 0,
                               mr: open ? 3 : 'auto',
                               justifyContent: 'center',
-                              color: '#9DA5B4',
+                              color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
                             }}
                           >
                             {child.icon}
@@ -708,7 +784,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             primaryTypographyProps={{
                               fontSize: '0.875rem',
                               fontWeight: 500,
-                              color: '#9DA5B4',
+                              color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
                             }}
                             sx={{ opacity: open ? 1 : 0 }}
                           />
@@ -729,7 +805,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: '64px',
-          backgroundColor: '#F8F9FA', // TSS light gray background
+          backgroundColor: theme.palette.background.default, // Background color from theme
           minHeight: 'calc(100vh - 64px)',
         }}
       >
