@@ -7,10 +7,12 @@ import './App.css'
 import DashboardLayout from './components/DashboardLayout'
 import CreateDashboard from './components/CreateDashboard'
 import WidgetSearchPopup from './components/WidgetSearchPopup'
+import Dashboard from './components/Dashboard'
 
 function App() {
   const [dashboardName, setDashboardName] = useState('My Dashboard')
   const [isWidgetPopupOpen, setIsWidgetPopupOpen] = useState(false)
+  const [dashboardId, setDashboardId] = useState('dashboard-1')
   const theme = useTheme()
 
   const handleAddWidget = () => {
@@ -24,8 +26,16 @@ function App() {
 
   const handleSelectWidget = (type: string, title: string) => {
     console.log('Selected widget:', { type, title })
-    // Here you would typically add the widget to the dashboard
+    // In a real application, this would make an API call to add the widget to the dashboard
+    // For now, we're just logging it and closing the popup
+    // The actual widget addition would be handled by the Dashboard component
+    // which would fetch the updated dashboard definition from the API
     setIsWidgetPopupOpen(false)
+
+    // To simulate a refresh of the dashboard after adding a widget,
+    // we can change the dashboardId which will trigger a re-fetch
+    // In a real app, this would be handled by the API
+    setDashboardId(`dashboard-1-${Date.now()}`)
   }
 
   return (
@@ -37,18 +47,10 @@ function App() {
             onDashboardNameChange={setDashboardName}
             onAddWidget={handleAddWidget}
           >
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-              p: 3
-            }}>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-                Dashboard Content
-              </Typography>
-            </Box>
+            <Dashboard
+              dashboardId={dashboardId}
+              onLayoutChange={(layout) => console.log('Layout changed:', layout)}
+            />
           </DashboardLayout>
         } />
         <Route path="/create-dashboard" element={

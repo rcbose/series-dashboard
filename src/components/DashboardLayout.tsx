@@ -802,11 +802,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          p: { xs: 1, sm: 2, md: 3 },
+          width: { xs: '100%', sm: `calc(100% - ${drawerWidth}px)` },
           mt: '64px',
           backgroundColor: theme.palette.background.default, // Background color from theme
           minHeight: 'calc(100vh - 64px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
         }}
       >
         <Box
@@ -815,8 +818,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             backgroundColor: theme.palette.background.paper,
             boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             border: '1px solid rgba(0, 0, 0, 0.05)',
-            p: 3,
+            p: { xs: 1, sm: 2, md: 3 },
             mb: 3,
+            width: '100%',
+            maxWidth: '100%',
+            overflow: 'hidden',
+            flexGrow: 1,
           }}
         >
           {children}
