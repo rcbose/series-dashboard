@@ -223,10 +223,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
           borderBottom: `1px solid ${theme.palette.divider}`,
-          height: '64px',
+          height: '50px',
         }}
       >
-        <Toolbar sx={{ minHeight: '64px !important', position: 'relative' }}>
+        <Toolbar sx={{ minHeight: '50px !important', position: 'relative' }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -454,7 +454,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <Box
             sx={{
               position: 'relative',
-              borderRadius: theme.shape.borderRadius,
+              borderRadius: 0,
               backgroundColor: alpha(theme.palette.background.default, 1),
               border: `1px solid ${theme.palette.divider}`,
               '&:hover': {
@@ -462,7 +462,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 border: `1px solid ${alpha(theme.palette.text.primary, 0.2)}`,
               },
               margin: '0 auto',
-              width: '400px',
+              width: '600px',
               flexShrink: 0,
             }}
           >
@@ -487,7 +487,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               onChange={handleSearchChange}
               sx={{
                 color: theme.palette.text.primary,
-                padding: '8px 8px 8px 0',
+                padding: '6px 8px 6px 0',
                 paddingLeft: '48px',
                 transition: theme.transitions.create('width'),
                 width: '100%',
@@ -804,9 +804,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           flexGrow: 1,
           p: { xs: 1, sm: 2, md: 3 },
           width: { xs: '100%', sm: `calc(100% - ${drawerWidth}px)` },
-          mt: '64px',
+          mt: '50px',
           backgroundColor: theme.palette.background.default, // Background color from theme
-          minHeight: 'calc(100vh - 64px)',
+          minHeight: 'calc(100vh - 50px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'stretch',
@@ -814,10 +814,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       >
         <Box
           sx={{
-            borderRadius: theme.shape.borderRadius,
+            borderRadius: 0,
             backgroundColor: theme.palette.background.paper,
             boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-            border: '1px solid rgba(0, 0, 0, 0.05)',
             p: { xs: 1, sm: 2, md: 3 },
             mb: 3,
             width: '100%',
