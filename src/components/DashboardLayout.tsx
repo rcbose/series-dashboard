@@ -826,7 +826,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             flexGrow: 1,
           }}
         >
-          {children}
+          {React.isValidElement(children)
+            ? React.cloneElement(children, { isEditMode })
+            : children}
         </Box>
       </Box>
     </Box>
