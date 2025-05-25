@@ -8,6 +8,7 @@ import DashboardLayout from './components/DashboardLayout'
 import CreateDashboard from './components/CreateDashboard'
 import WidgetSearchPopup from './components/WidgetSearchPopup'
 import Dashboard from './components/Dashboard'
+import DiscoverPage from './components/DiscoverPage'; // Import DiscoverPage
 
 function App() {
   const [dashboardName, setDashboardName] = useState('My Dashboard')
@@ -60,6 +61,12 @@ function App() {
             onAddWidget={handleAddWidget}
           >
             <CreateDashboard />
+          </DashboardLayout>
+        } />
+        {/* Add DiscoverPage Route */}
+        <Route path="/discover" element={
+          <DashboardLayout dashboardName="Discover">
+            <DiscoverPage />
           </DashboardLayout>
         } />
         <Route path="*" element={<Navigate to="/" replace />} />

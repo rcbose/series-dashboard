@@ -55,10 +55,11 @@ const tssColors = {
 
 const drawerWidth = 240;
 
-interface MenuItem {
+interface AppMenuItem {
   text: string;
   icon: React.ReactNode;
-  children?: MenuItem[];
+  path?: string;
+  children?: AppMenuItem[];
 }
 
 interface DashboardLayoutProps {
@@ -99,6 +100,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   useEffect(() => {
     if (location.pathname === '/create-dashboard' && !propDashboardName) {
       setDashboardName('New Dashboard');
+    } else if (location.pathname === '/discover') {
+      setDashboardName('Discover');
     } else if (!propDashboardName) {
       setDashboardName('Dashboard');
     }
@@ -157,7 +160,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     setDashboardName(event.target.value);
   };
 
-  const handleMenuItemClick = (text: string) => {
+  const handleMenuItemClickInternal = (text: string) => {
     setExpandedItems((prevExpanded) => {
       if (prevExpanded.includes(text)) {
         return prevExpanded.filter((item) => item !== text);
@@ -183,20 +186,21 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }
   };
 
-  const menuItems: MenuItem[] = [
+  const menuItems: AppMenuItem[] = [
     {
       text: 'Dashboard',
       icon: <DashboardIcon />,
+      // path: '/', // Optional: if the main Dashboard itself should be a link
       children: [
-        { text: 'My Dashboard', icon: <DashboardIcon /> },
-        { text: 'Analytics Dashboard', icon: <DashboardIcon /> },
-        { text: 'Monitoring Dashboard', icon: <DashboardIcon /> }
+        { text: 'My Dashboard', icon: <DashboardIcon />, path: '/' }, // Example path
+        { text: 'Analytics Dashboard', icon: <DashboardIcon />, path: '/analytics' }, // Example path
+        { text: 'Monitoring Dashboard', icon: <DashboardIcon />, path: '/monitoring' } // Example path
       ]
     },
-    { text: 'Discover', icon: <SearchIcon /> },
-    { text: 'Admin', icon: <AdminIcon /> },
-    { text: 'Alerts', icon: <AlertsIcon /> },
-    { text: 'Notifications', icon: <NotificationsIcon /> },
+    { text: 'Discover', icon: <SearchIcon />, path: '/discover' },
+    { text: 'Admin', icon: <AdminIcon />, path: '/admin' }, // Example path
+    { text: 'Alerts', icon: <AlertsIcon />, path: '/alerts' }, // Example path
+    { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications' }, // Example path
   ];
 
   return (
@@ -705,8 +709,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             <React.Fragment key={item.text}>
               <ListItem disablePadding sx={{ display: 'block', mb: 0.5 }}>
                 <ListItemButton
-                  selected={index === 0} // Make the first item selected by default
-                  onClick={() => item.children && handleMenuItemClick(item.text)}
+                  selected={location.pathname === item.path || (item.children && item.children.some(child => child.path === location.pathname))}
+                  onClick={() => {
+                    if (item.path) {
+                      navigate(item.path);
+                    } else if (item.children) {
+                      handleMenuItemClickInternal(item.text);
+                    }
+                  }}
                   sx={{
                     minHeight: 40,
                     justifyContent: open ? 'initial' : 'center',
@@ -714,12 +724,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     py: 1,
                     borderRadius: theme.shape.borderRadius,
                     '&:hover': {
-                      backgroundColor: index === 0 ? (theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg) : (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)'),
+                      backgroundColor: (location.pathname === item.path || (item.children && item.children.some(child => child.path === location.pathname))) ? (theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg) : (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)'),
                     },
                     '&.Mui-selected': {
-                      backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg,
+                      backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.25) : tssColors.sidebarActiveBg, // Slightly darker selected
                       '&:hover': {
-                        backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg,
+                        backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.3) : tssColors.sidebarActiveBg, // Slightly darker hover on selected
                       },
                     },
                   }}
@@ -729,7 +739,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       minWidth: 0,
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center',
-                      color: index === 0 ? theme.palette.primary.main : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
+                      color: location.pathname === item.path || (item.children && item.children.some(c => c.path === location.pathname)) ? theme.palette.primary.main : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
                     }}
                   >
                     {item.icon}
@@ -739,7 +749,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     primaryTypographyProps={{
                       fontSize: '0.875rem',
                       fontWeight: 500,
-                      color: index === 0 ? (theme.palette.mode === 'dark' ? theme.palette.common.white : tssColors.sidebarActiveText) : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
+                      color: location.pathname === item.path || (item.children && item.children.some(c => c.path === location.pathname)) ? (theme.palette.mode === 'dark' ? theme.palette.common.white : tssColors.sidebarActiveText) : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
                     }}
                     sx={{ opacity: open ? 1 : 0 }}
                   />
@@ -757,6 +767,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     {item.children.map((child) => (
                       <ListItem key={child.text} disablePadding sx={{ display: 'block', mb: 0.5 }}>
                         <ListItemButton
+                          selected={location.pathname === child.path}
+                          onClick={() => {
+                            if (child.path) {
+                              navigate(child.path);
+                            }
+                          }}
                           sx={{
                             minHeight: 40,
                             justifyContent: open ? 'initial' : 'center',
@@ -765,7 +781,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             pl: open ? 4 : 2, // Indent child items
                             borderRadius: theme.shape.borderRadius,
                             '&:hover': {
-                              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                              backgroundColor: location.pathname === child.path ? (theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.2) : tssColors.sidebarActiveBg) : (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)'),
+                            },
+                            '&.Mui-selected': {
+                              backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.25) : tssColors.sidebarActiveBg,
+                               '&:hover': {
+                                backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.primary.main, 0.3) : tssColors.sidebarActiveBg,
+                              },
                             },
                           }}
                         >
@@ -774,7 +796,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                               minWidth: 0,
                               mr: open ? 3 : 'auto',
                               justifyContent: 'center',
-                              color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
+                              color: location.pathname === child.path ? theme.palette.primary.main : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
                             }}
                           >
                             {child.icon}
@@ -784,7 +806,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             primaryTypographyProps={{
                               fontSize: '0.875rem',
                               fontWeight: 500,
-                              color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
+                              color: location.pathname === child.path ? (theme.palette.mode === 'dark' ? theme.palette.common.white : tssColors.sidebarActiveText) : (theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText),
                             }}
                             sx={{ opacity: open ? 1 : 0 }}
                           />
