@@ -66,13 +66,15 @@ interface DashboardLayoutProps {
   dashboardName?: string;
   onDashboardNameChange?: (name: string) => void;
   onAddWidget?: () => void;
+  customToolbar?: React.ReactNode; // Add custom toolbar prop
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   dashboardName: propDashboardName,
   onDashboardNameChange,
-  onAddWidget
+  onAddWidget,
+  customToolbar
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -227,404 +229,430 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         }}
       >
         <Toolbar sx={{ minHeight: '50px !important', position: 'relative' }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 3,
-              ...(open && { display: 'none' }),
-              color: theme.palette.text.secondary,
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2, minWidth: '300px', maxWidth: '600px' }}>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              onClick={() => navigate('/')}
-              sx={{
-                flexGrow: 0,
-                display: { xs: 'none', sm: 'block' },
-                fontWeight: 600,
-                fontSize: '1rem',
-                color: theme.palette.secondary.main,
-                cursor: 'pointer',
-                '&:hover': {
-                  textDecoration: 'underline',
-                },
-              }}
-            >
-              Dashboard
-            </Typography>
-
-            {location.pathname === '/create-dashboard' && (
-              <>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  sx={{
-                    mx: 1.5,
-                    color: 'text.secondary',
-                    fontSize: '1.2rem',
-                    fontWeight: 500,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  {'>'}
-                </Typography>
-
-                {isEditing ? (
-                  <ClickAwayListener onClickAway={handleDashboardNameBlur}>
-                    <TextField
-                      autoFocus
-                      value={dashboardName}
-                      onChange={handleDashboardNameChange}
-                      onKeyDown={handleDashboardNameKeyDown}
-                      onBlur={handleDashboardNameBlur}
-                      variant="standard"
-                      sx={{
-                        marginLeft: 1,
-                        minWidth: '150px',
-                        maxWidth: '500px',
-                        '& .MuiInputBase-root': {
-                          fontWeight: 600,
-                          fontSize: '1rem',
-                          color: theme.palette.secondary.main,
-                          textAlign: 'left',
-                          whiteSpace: 'nowrap',
-                        },
-                        '& .MuiInput-underline:before': {
-                          borderBottomColor: theme.palette.secondary.main,
-                        },
-                        '& .MuiInput-underline:after': {
-                          borderBottomColor: theme.palette.secondary.main,
-                        },
-                      }}
-                    />
-                  </ClickAwayListener>
-                ) : (
-                  <Box
-                    onClick={handleDashboardNameClick}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      border: `1px dashed ${alpha(theme.palette.text.primary, 0.2)}`,
-                      borderRadius: '4px',
-                      padding: '4px 8px',
-                      marginLeft: 1,
-                      minWidth: '150px',
-                      maxWidth: '500px',
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.text.primary, 0.04),
-                      },
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        flexGrow: 1,
-                        display: { xs: 'none', sm: 'block' },
-                        fontWeight: 600,
-                        fontSize: '1rem',
-                        color: theme.palette.secondary.main,
-                        mr: 1,
-                        whiteSpace: 'nowrap',
-                        textAlign: 'left',
-                      }}
-                    >
-                      {dashboardName}
-                    </Typography>
-                    <EditIcon
-                      fontSize="small"
-                      sx={{
-                        color: theme.palette.secondary.main,
-                        fontSize: '0.875rem',
-                      }}
-                    />
-                  </Box>
-                )}
-              </>
-            )}
-
-            {location.pathname !== '/create-dashboard' && (
-              <>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  sx={{
-                    mx: 1.5,
-                    color: 'text.secondary',
-                    fontSize: '1.2rem',
-                    fontWeight: 500,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  {'>'}
-                </Typography>
-
-                {isEditing ? (
-                  <ClickAwayListener onClickAway={handleDashboardNameBlur}>
-                    <TextField
-                      autoFocus
-                      value={dashboardName}
-                      onChange={handleDashboardNameChange}
-                      onKeyDown={handleDashboardNameKeyDown}
-                      onBlur={handleDashboardNameBlur}
-                      variant="standard"
-                      sx={{
-                        marginLeft: 1,
-                        minWidth: '150px',
-                        maxWidth: '500px',
-                        '& .MuiInputBase-root': {
-                          fontWeight: 600,
-                          fontSize: '1rem',
-                          color: theme.palette.secondary.main,
-                          textAlign: 'left',
-                          whiteSpace: 'nowrap',
-                        },
-                        '& .MuiInput-underline:before': {
-                          borderBottomColor: theme.palette.secondary.main,
-                        },
-                        '& .MuiInput-underline:after': {
-                          borderBottomColor: theme.palette.secondary.main,
-                        },
-                      }}
-                    />
-                  </ClickAwayListener>
-                ) : (
-                  <Box
-                    onClick={handleDashboardNameClick}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      border: `1px dashed ${alpha(theme.palette.text.primary, 0.2)}`,
-                      borderRadius: '4px',
-                      padding: '4px 8px',
-                      marginLeft: 1,
-                      minWidth: '150px',
-                      maxWidth: '500px',
-                      '&:hover': {
-                        backgroundColor: alpha(theme.palette.text.primary, 0.04),
-                      },
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        flexGrow: 1,
-                        display: { xs: 'none', sm: 'block' },
-                        fontWeight: 600,
-                        fontSize: '1rem',
-                        color: theme.palette.secondary.main,
-                        mr: 1,
-                        whiteSpace: 'nowrap',
-                        textAlign: 'left',
-                      }}
-                    >
-                      {dashboardName}
-                    </Typography>
-                    <EditIcon
-                      fontSize="small"
-                      sx={{
-                        color: theme.palette.secondary.main,
-                        fontSize: '0.875rem',
-                      }}
-                    />
-                  </Box>
-                )}
-              </>
-            )}
-          </Box>
-
-          {/* Search bar with TSS style */}
-          <Box sx={{ flexGrow: 1 }} />
-
-          <Box
-            sx={{
-              position: 'relative',
-              borderRadius: 0,
-              backgroundColor: alpha(theme.palette.background.default, 1),
-              border: `1px solid ${theme.palette.divider}`,
-              '&:hover': {
-                backgroundColor: alpha(theme.palette.background.default, 1),
-                border: `1px solid ${alpha(theme.palette.text.primary, 0.2)}`,
-              },
-              margin: '0 auto',
-              width: '600px',
-              flexShrink: 0,
-            }}
-          >
-            <Box
-              sx={{
-                padding: '0 16px',
-                height: '100%',
-                position: 'absolute',
-                pointerEvents: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: theme.palette.text.secondary,
-              }}
-            >
-              <SearchIcon />
-            </Box>
-            <InputBase
-              inputRef={searchInputRef}
-              placeholder="Search... (Ctrl+K)"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              sx={{
-                color: theme.palette.text.primary,
-                padding: '6px 8px 6px 0',
-                paddingLeft: '48px',
-                transition: theme.transitions.create('width'),
-                width: '100%',
-                fontSize: '0.875rem',
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Box>
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          {/* User profile and settings - TSS style */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {isEditMode && onAddWidget && (
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={onAddWidget}
+          {customToolbar ? (
+            // Use custom toolbar if provided
+            <>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
                 sx={{
-                  mr: 2,
-                  backgroundColor: theme.palette.secondary.main,
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: theme.palette.secondary.dark,
-                  },
-                  textTransform: 'none',
-                  fontWeight: 500,
-                  fontSize: '0.875rem',
-                  borderRadius: '4px',
-                  padding: '6px 16px',
+                  marginRight: 3,
+                  ...(open && { display: 'none' }),
+                  color: theme.palette.text.secondary,
                 }}
               >
-                Add Widget
-              </Button>
-            )}
-            <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              onClick={handleToggleEditMode}
-              sx={{
-                mr: 2,
-                backgroundColor: isEditMode ? theme.palette.error.main : theme.palette.secondary.main,
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: isEditMode ? theme.palette.error.dark : theme.palette.secondary.dark,
-                },
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '0.875rem',
-                borderRadius: '4px',
-                padding: '6px 16px',
-              }}
-            >
-              {isEditMode ? 'Exit Edit Mode' : 'Edit Dashboard'}
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleCreateDashboard}
-              sx={{
-                mr: 2,
-                backgroundColor: theme.palette.secondary.main,
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: theme.palette.secondary.dark,
-                },
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '0.875rem',
-                borderRadius: '4px',
-                padding: '6px 16px',
-              }}
-            >
-              Create Dashboard
-            </Button>
-            <Avatar
-              onClick={handleProfileMenuOpen}
-              sx={{
-                bgcolor: theme.palette.secondary.main,
-                cursor: 'pointer',
-                width: 32,
-                height: 32,
-                fontSize: '0.875rem',
-                fontWeight: 600
-              }}
-            >
-              DD
-            </Avatar>
-            <Menu
-              anchorEl={profileMenuAnchorEl}
-              open={isProfileMenuOpen}
-              onClose={handleProfileMenuClose}
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.1))',
-                  mt: 1.5,
-                  '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
+                <MenuIcon />
+              </IconButton>
+              {customToolbar}
+              <Menu
+                anchorEl={profileMenuAnchorEl}
+                open={isProfileMenuOpen}
+                onClose={handleProfileMenuClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: 'visible',
+                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.1))',
+                    mt: 1.5,
+                    '& .MuiAvatar-root': {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
                   },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-              <MenuItem>
-                <Typography variant="body1">Profile</Typography>
-              </MenuItem>
-              <MenuItem>
-                <Typography variant="body1">Settings</Typography>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={toggleTheme}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {themeMode === 'light' ? (
-                    <>
-                      <Brightness4 sx={{ mr: 1 }} />
-                      <Typography variant="body1">Switch to Dark Mode</Typography>
-                    </>
-                  ) : (
-                    <>
-                      <Brightness7 sx={{ mr: 1 }} />
-                      <Typography variant="body1">Switch to Light Mode</Typography>
-                    </>
-                  )}
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <MenuItem>
+                  <Typography variant="body1">Profile</Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography variant="body1">Settings</Typography>
+                </MenuItem>
+                <Divider />
+                <MenuItem>
+                  <Typography variant="body1">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </>
+          ) : (
+            // Default toolbar
+            <>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{
+                  marginRight: 3,
+                  ...(open && { display: 'none' }),
+                  color: theme.palette.text.secondary,
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2, minWidth: '300px', maxWidth: '600px' }}>
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  onClick={() => navigate('/')}
+                  sx={{
+                    flexGrow: 0,
+                    display: { xs: 'none', sm: 'block' },
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                    color: theme.palette.secondary.main,
+                    cursor: 'pointer',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Dashboard
+                </Typography>
+
+                {location.pathname === '/create-dashboard' && (
+                  <>
+                    <Typography
+                      variant="h6"
+                      noWrap
+                      component="div"
+                      sx={{
+                        mx: 1.5,
+                        color: 'text.secondary',
+                        fontSize: '1.2rem',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {'>'}
+                    </Typography>
+
+                    {isEditing ? (
+                      <ClickAwayListener onClickAway={handleDashboardNameBlur}>
+                        <TextField
+                          autoFocus
+                          value={dashboardName}
+                          onChange={handleDashboardNameChange}
+                          onKeyDown={handleDashboardNameKeyDown}
+                          onBlur={handleDashboardNameBlur}
+                          variant="standard"
+                          sx={{
+                            marginLeft: 1,
+                            minWidth: '150px',
+                            maxWidth: '500px',
+                            '& .MuiInputBase-root': {
+                              fontWeight: 600,
+                              fontSize: '1rem',
+                              color: theme.palette.secondary.main,
+                              textAlign: 'left',
+                              whiteSpace: 'nowrap',
+                            },
+                            '& .MuiInput-underline:before': {
+                              borderBottomColor: theme.palette.secondary.main,
+                            },
+                            '& .MuiInput-underline:after': {
+                              borderBottomColor: theme.palette.secondary.main,
+                            },
+                          }}
+                        />
+                      </ClickAwayListener>
+                    ) : (
+                      <Box
+                        onClick={handleDashboardNameClick}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          border: `1px dashed ${alpha(theme.palette.text.primary, 0.2)}`,
+                          borderRadius: '4px',
+                          padding: '4px 8px',
+                          marginLeft: 1,
+                          minWidth: '150px',
+                          maxWidth: '500px',
+                          '&:hover': {
+                            backgroundColor: alpha(theme.palette.text.primary, 0.04),
+                          },
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          component="div"
+                          sx={{
+                            flexGrow: 1,
+                            display: { xs: 'none', sm: 'block' },
+                            fontWeight: 600,
+                            fontSize: '1rem',
+                            color: theme.palette.secondary.main,
+                            mr: 1,
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left',
+                          }}
+                        >
+                          {dashboardName}
+                        </Typography>
+                        <EditIcon
+                          fontSize="small"
+                          sx={{
+                            color: theme.palette.secondary.main,
+                            fontSize: '0.875rem',
+                          }}
+                        />
+                      </Box>
+                    )}
+                  </>
+                )}
+
+                {location.pathname !== '/create-dashboard' && (
+                  <>
+                    <Typography
+                      variant="h6"
+                      noWrap
+                      component="div"
+                      sx={{
+                        mx: 1.5,
+                        color: 'text.secondary',
+                        fontSize: '1.2rem',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {'>'}
+                    </Typography>
+
+                    {isEditing ? (
+                      <ClickAwayListener onClickAway={handleDashboardNameBlur}>
+                        <TextField
+                          autoFocus
+                          value={dashboardName}
+                          onChange={handleDashboardNameChange}
+                          onKeyDown={handleDashboardNameKeyDown}
+                          onBlur={handleDashboardNameBlur}
+                          variant="standard"
+                          sx={{
+                            marginLeft: 1,
+                            minWidth: '150px',
+                            maxWidth: '500px',
+                            '& .MuiInputBase-root': {
+                              fontWeight: 600,
+                              fontSize: '1rem',
+                              color: theme.palette.secondary.main,
+                              textAlign: 'left',
+                              whiteSpace: 'nowrap',
+                            },
+                            '& .MuiInput-underline:before': {
+                              borderBottomColor: theme.palette.secondary.main,
+                            },
+                            '& .MuiInput-underline:after': {
+                              borderBottomColor: theme.palette.secondary.main,
+                            },
+                          }}
+                        />
+                      </ClickAwayListener>
+                    ) : (
+                      <Box
+                        onClick={handleDashboardNameClick}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          border: `1px dashed ${alpha(theme.palette.text.primary, 0.2)}`,
+                          borderRadius: '4px',
+                          padding: '4px 8px',
+                          marginLeft: 1,
+                          minWidth: '150px',
+                          maxWidth: '500px',
+                          '&:hover': {
+                            backgroundColor: alpha(theme.palette.text.primary, 0.04),
+                          },
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          component="div"
+                          sx={{
+                            flexGrow: 1,
+                            display: { xs: 'none', sm: 'block' },
+                            fontWeight: 600,
+                            fontSize: '1rem',
+                            color: theme.palette.secondary.main,
+                            mr: 1,
+                            whiteSpace: 'nowrap',
+                            textAlign: 'left',
+                          }}
+                        >
+                          {dashboardName}
+                        </Typography>
+                        <EditIcon
+                          fontSize="small"
+                          sx={{
+                            color: theme.palette.secondary.main,
+                            fontSize: '0.875rem',
+                          }}
+                        />
+                      </Box>
+                    )}
+                  </>
+                )}
+              </Box>
+
+              {/* Search bar with TSS style */}
+              <Box sx={{ flexGrow: 1 }} />
+
+              <Box
+                sx={{
+                  position: 'relative',
+                  borderRadius: 0,
+                  backgroundColor: alpha(theme.palette.background.default, 1),
+                  border: `1px solid ${theme.palette.divider}`,
+                  '&:hover': {
+                    backgroundColor: alpha(theme.palette.background.default, 1),
+                    border: `1px solid ${alpha(theme.palette.text.primary, 0.2)}`,
+                  },
+                  margin: '0 auto',
+                  width: '600px',
+                  flexShrink: 0,
+                }}
+              >
+                <Box
+                  sx={{
+                    padding: '0 16px',
+                    height: '100%',
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: theme.palette.text.secondary,
+                  }}
+                >
+                  <SearchIcon />
                 </Box>
-              </MenuItem>
-              <Divider />
-              <MenuItem>
-                <Typography variant="body1">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+                <InputBase
+                  inputRef={searchInputRef}
+                  placeholder="Search... (Ctrl+K)"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  sx={{
+                    color: theme.palette.text.primary,
+                    padding: '6px 8px 6px 0',
+                    paddingLeft: '48px',
+                    transition: theme.transitions.create('width'),
+                    width: '100%',
+                    fontSize: '0.875rem',
+                  }}
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Box>
+
+              <Box sx={{ flexGrow: 1 }} />
+
+              {/* User profile and settings - TSS style */}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {isEditMode && onAddWidget && (
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={onAddWidget}
+                    sx={{
+                      mr: 2,
+                      backgroundColor: theme.palette.secondary.main,
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: theme.palette.secondary.dark,
+                      },
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      fontSize: '0.875rem',
+                      borderRadius: '4px',
+                      padding: '6px 16px',
+                    }}
+                  >
+                    Add Widget
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  startIcon={<EditIcon />}
+                  onClick={handleToggleEditMode}
+                  sx={{
+                    mr: 2,
+                    backgroundColor: isEditMode ? theme.palette.error.main : theme.palette.secondary.main,
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: isEditMode ? theme.palette.error.dark : theme.palette.secondary.dark,
+                    },
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    fontSize: '0.875rem',
+                    borderRadius: '4px',
+                    padding: '6px 16px',
+                  }}
+                >
+                  {isEditMode ? 'Exit Edit Mode' : 'Edit Dashboard'}
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={handleCreateDashboard}
+                  sx={{
+                    mr: 2,
+                    backgroundColor: theme.palette.secondary.main,
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: theme.palette.secondary.dark,
+                    },
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    fontSize: '0.875rem',
+                    borderRadius: '4px',
+                    padding: '6px 16px',
+                  }}
+                >
+                  Create Dashboard
+                </Button>
+                <Menu
+                  anchorEl={profileMenuAnchorEl}
+                  open={isProfileMenuOpen}
+                  onClose={handleProfileMenuClose}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      overflow: 'visible',
+                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.1))',
+                      mt: 1.5,
+                      '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuItem>
+                    <Typography variant="body1">Profile</Typography>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography variant="body1">Settings</Typography>
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem>
+                    <Typography variant="body1">Logout</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -797,6 +825,95 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </React.Fragment>
           ))}
         </List>
+
+        {/* Common buttons at the bottom of drawer menu */}
+        <Box sx={{ mt: 'auto', mb: 2, px: 1 }}>
+          <Divider sx={{ my: 2, backgroundColor: 'rgba(255, 255, 255, 0.1)' }} />
+
+          {/* Profile button */}
+          <ListItem disablePadding sx={{ display: 'block', mb: 0.5 }}>
+            <ListItemButton
+              onClick={handleProfileMenuOpen}
+              sx={{
+                minHeight: 40,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2,
+                py: 1,
+                borderRadius: theme.shape.borderRadius,
+                '&:hover': {
+                  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
+                }}
+              >
+                <Avatar
+                  sx={{
+                    bgcolor: theme.palette.secondary.main,
+                    width: 24,
+                    height: 24,
+                    fontSize: '0.75rem',
+                    fontWeight: 600
+                  }}
+                >
+                  DD
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText
+                primary="Profile"
+                primaryTypographyProps={{
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
+                }}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+
+          {/* Theme toggle button */}
+          <ListItem disablePadding sx={{ display: 'block', mb: 0.5 }}>
+            <ListItemButton
+              onClick={toggleTheme}
+              sx={{
+                minHeight: 40,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2,
+                py: 1,
+                borderRadius: theme.shape.borderRadius,
+                '&:hover': {
+                  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
+                }}
+              >
+                {themeMode === 'light' ? <Brightness4 /> : <Brightness7 />}
+              </ListItemIcon>
+              <ListItemText
+                primary={themeMode === 'light' ? "Dark Mode" : "Light Mode"}
+                primaryTypographyProps={{
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : tssColors.sidebarText,
+                }}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </Box>
       </Drawer>
       <Box
         component="main"
